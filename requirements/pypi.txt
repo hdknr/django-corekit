@@ -7,7 +7,7 @@ django-click
 
 # REST
 djangorestframework
-django-rest-pandas
+rest-pandas
 furl
 requests
 
