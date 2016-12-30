@@ -1,0 +1,26 @@
+# Django
+django
+pytz
+
+# tools
+django-click
+
+# REST
+djangorestframework
+django-rest-pandas
+furl
+requests
+
+# Backend
+django-storages
+
+# Text
+markdown
+py-gfm
+
+# Excel
+openpyxl
+xlwt
+
+# AWS
+awscli

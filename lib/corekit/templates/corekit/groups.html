@@ -1,0 +1,78 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static coretags %}
+
+{% block content %}
+<div id="content-main">
+
+  {% block object-tools %}
+       <ul class="object-tools">
+         <li>
+           <a href="#">
+             <i class="fa fa-book"></i>
+             <i class="fa fa-question"></i>
+             </a>
+         </li>
+       </ul>
+  {% endblock %}
+
+  <ul class="horizontal">
+    <li>{% trans 'Applications' %}  -  [<a href="?">{% trans 'All Application' %}</a>]</li>
+    {% for label in app_labels %}
+    <li>[<a {% if label == request.GET.app_label %}class=highlight{% else %}href="?app_label={{ label }}"{% endif %}>
+      {{ label|app_config|attr:'verbose_name' }}</a>]
+    </li>
+    {% endfor %}
+  </ul>
+
+  <table class="table">
+  <thead>
+    <th>{% trans 'Group Name' %}</th>
+    <th>{% trans 'Permission Name' %}</th>
+    <th>{% trans 'Permission Code' %}</th>
+    <th>{% trans 'Application Label' %}</th>
+    <th>{% trans 'Model' %}</th>
+  </thead>
+  <tbody>
+  {% for group in groups %}
+    {% for perm in group.permissions.all %}
+   <tr>
+    {% if forloop.counter0 == 0 %}
+    <td rowspan="{{ group.permissions.count }}"><a href="{{ group|to_admin_change_url }}">{{ group.name }}</a></td>
+    {% endif %}
+    <td><a href="{{ perm|to_admin_change_url }}">{{ perm.name }}</a></td>
+    <td>{{ perm.codename }}</td>
+    <td><a href="?app_label={{ perm.content_type.app_label}}">{{ perm.content_type.app_label}}</a></td>
+    <td>
+      <a href="{{ perm.content_type|to_admin_change_url }}">{{ perm.content_type.model }}</a>
+      <br/>
+     {{ perm.content_type|app_config|attr:'verbose_name' }}{{ perm.content_type.model_class|attr:'_meta'|attr:'verbose_name' }}</td>
+   </tr>
+    {% endfor %}
+  {% endfor %}
+  </tbody>
+  </table>
+</div> <!--#content-main -->
+
+{% endblock %}
+
+{% block extrahead %}
+{{ block.super  }}
+<script src="{% static 'jquery/dist/jquery.js' %}"></script>
+<script src="{% static 'jquery-ui/jquery-ui.min.js' %}"></script>
+<script type="text/javascript" charset="utf-8">
+$(function(){
+ $("a.button").button();
+});
+</script>
+{% endblock %}
+
+
+{% block extrastyle %}
+  {{ block.super }}
+<link href="{% static 'font-awesome/css/font-awesome.css' %}" rel="stylesheet">
+<link href="{% static 'jquery-ui/themes/cupertino/jquery-ui.min.css' %}" rel="stylesheet">
+<style type="text/css">
+ul.horizontal li {display: inline-block;}
+.highlight {font-weight: bold; }
+</style>
+{% endblock %}
