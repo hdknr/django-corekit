@@ -1,8 +1,9 @@
 #! /usr/bin/env python
 
 NAME = 'django-corekit'
+PACKAGE = 'corekit'
 DESCRIPTION = 'Core Toolkit for Django'
-PACKAGES = ['corekit', ]
+PACKAGES = [PACKAGE, ]
 
 SITE = 'github.com'
 USER = "hdknr"
