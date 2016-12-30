@@ -12,7 +12,7 @@ from django.forms.models import model_to_dict
 from itertools import chain
 from utils import force_bool
 import re
-from core.serializers import BaseObjectSerializer as Sz
+from .serializers import BaseObjectSerializer as Sz
 
 
 class CoreModel(object):

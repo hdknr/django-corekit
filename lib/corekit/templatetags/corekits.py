@@ -6,9 +6,9 @@ from django.utils.safestring import SafeText, mark_safe as _S
 from django.utils.translation import ugettext_lazy as _
 from django.core.serializers.json import DjangoJSONEncoder
 from django.template import Context, Template, loader
-from django.utils import translation, formats
+from django.utils import formats
 from django.apps import registry
-from core import (utils, models, methods)
+from corekit import (utils, methods)
 from datetime import date
 import json
 import os
@@ -180,21 +180,6 @@ def bs_form_group(context, *fields, **kwargs):
     for i in range(len(fields)):
         fields[i].column_width = widths[i]
     return t.render(Context(kwargs, autoescape=context.autoescape))
-
-
-@register.simple_tag
-def trans_field(instance, field_name):
-    lang = translation.get_language()
-    name = instance._meta.object_name + "Trans"
-    rels = [
-        r for r in models.BaseModel.get_all_related_objects(instance)
-        if r.related_model._meta.object_name == name]
-
-    if rels and lang:
-        instance = rels[0].related_model.objects.filter(
-            original=instance, lang=lang).first() or instance
-    res = getattr(instance, field_name, None)
-    return res or ''
 
 
 @register.filter
