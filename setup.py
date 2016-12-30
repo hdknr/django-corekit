@@ -31,7 +31,7 @@ def install():
             'Programming Language :: Python',
         ],
         name=NAME,
-        version=getattr(__import__(NAME), 'get_version')(),
+        version=getattr(__import__(PACKAGE), 'get_version')(),
         url=URL,
         description=DESCRIPTION,
         download_url=URL,
