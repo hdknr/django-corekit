@@ -25,7 +25,6 @@ from . import methods, querysets, responses, utils
 from operator import itemgetter
 
 
-login_required = auth_decos.login_required
 never_cache = never_cache
 
 
@@ -91,6 +90,8 @@ class View(object):
     @classmethod
     def requires(self, perm_code):
         ''' perm_code permission is REQUIRED '''
+        if perm_code == 'login':
+            return auth_decos.login_required
         return auth_decos.permission_required(perm_code)
 
     @classmethod
