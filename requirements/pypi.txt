@@ -4,6 +4,8 @@ pytz
 
 # tools
 django-click
+enum34
+nkf
 
 # REST
 djangorestframework
