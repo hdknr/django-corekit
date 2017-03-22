@@ -53,7 +53,9 @@ class CoreModel(object):
     @classmethod
     def contenttype(cls, model=None):
         model = model or cls
-        return ContentType.objects.get_for_model(model)
+        for_concrete_model = not model._meta.proxy
+        return ContentType.objects.get_for_model(
+            model, for_concrete_model=for_concrete_model)
 
     @classmethod
     def contenttype_model(cls, content_type_key):
