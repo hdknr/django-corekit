@@ -3,7 +3,7 @@ from django.utils import translation
 from django.core.cache import cache
 
 from corekit.conf import load_conf, load_fixtures
-from core import methods, querysets
+from corekit import methods, querysets
 import djclick as click
 from logging import getLogger
 log = getLogger()
