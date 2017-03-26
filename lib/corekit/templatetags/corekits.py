@@ -7,6 +7,8 @@ from django.utils.translation import ugettext_lazy as _
 from django.core.serializers.json import DjangoJSONEncoder
 from django.template import Context, Template, loader
 from django.utils import formats
+from django.utils.html import format_html
+from django.middleware.csrf import get_token
 from django.apps import registry
 from corekit import (utils, methods)
 from datetime import date
@@ -262,3 +264,11 @@ def full_name(user):
     if user.first_name and user.last_name:
         return u" ".join([user.last_name, user.first_name])
     return user.username
+
+
+@register.filter
+def csrf_tag(request):
+    csrf_token = get_token(request)
+    return format_html(
+        "<input type='hidden' name='csrfmiddlewaretoken' value='{}' />",
+        csrf_token)
