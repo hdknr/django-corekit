@@ -5,25 +5,26 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import (
     decorators as auth_decos, models as auth_models,
     logout as auth_logout)
-from django.views.decorators.cache import never_cache
-from django.core.exceptions import PermissionDenied
-from django.core.files.storage import FileSystemStorage
-from django.http import HttpResponse, Http404, HttpResponseForbidden
-from django.template.response import TemplateResponse
-from django.template import RequestContext
-from django.utils.decorators import method_decorator as _M
-from django.utils import timezone
 from django.contrib.contenttypes.models import ContentType
+from django.core.cache import cache
+from django.core.exceptions import PermissionDenied
+from django.core.files import File
+from django.core.files.storage import FileSystemStorage
+from django.core.urlresolvers import reverse
 from django.db.models import Q
 from django.db.models.query import Prefetch
-from django.core.cache import cache
+from django.http import HttpResponse, Http404, HttpResponseForbidden
+from django.template import RequestContext
+from django.template.response import TemplateResponse
+from django.utils import timezone
+from django.utils.decorators import method_decorator as _M
 from django.utils.translation import ugettext_lazy as _
-from django.core.files import File
+from django.views.decorators.cache import never_cache
 import os
 import mimetypes
 
 from mimetypes import guess_type
-from functools import wraps
+from functools import wraps, partial
 from . import methods, querysets, responses, utils
 from operator import itemgetter
 
@@ -49,6 +50,7 @@ class View(object):
 
             wrapper.url = url
             wrapper.name = name
+            wrapper.reverse = partial(reverse, name)
             wrapper.order = order
             return classmethod(
                 reduce(lambda x, y: _M(y)(x), [wrapper] + decorators))
@@ -59,21 +61,11 @@ class View(object):
     def urls(cls):
         ''' list of urlpattern'''
         def _cache():
-            def _viewname(func_name):
-                if not hasattr(cls, 'Meta'):
-                    return "_".join([
-                        cls.__module__.split('.')[0],
-                        cls.__name__.lower(), func_name])
-                return "{}_{}_{}".format(
-                    cls.Meta.models._meta.app_label,
-                    cls.Meta.models._meta.model_name,
-                    func_name)
-
             funcs = []
             for name in cls.__dict__:
                 obj = getattr(cls, name)
                 if hasattr(obj, 'url'):
-                    viewname = obj.name or _viewname(name)
+                    viewname = obj.name
                     funcs.append((viewname, obj.order, obj))
 
             # sort by `obj.order`
