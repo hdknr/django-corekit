@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django import shortcuts
-from django.conf import urls
+from django.conf import urls, settings
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import (
     decorators as auth_decos, models as auth_models,
@@ -18,6 +18,9 @@ from django.db.models import Q
 from django.db.models.query import Prefetch
 from django.core.cache import cache
 from django.utils.translation import ugettext_lazy as _
+from django.core.files import File
+import os
+import mimetypes
 
 from mimetypes import guess_type
 from functools import wraps
@@ -214,3 +217,13 @@ def zipball(request, model):
     model_class = methods.CoreModel.contenttype_model(model)
     querysets.CoreQuerySet(model_class).zipball(res)
     return res
+
+
+def static(request, path, dir_name='', base_dir=None):
+    if path == '' or path.endswith('/'):
+        path = path + "index.html"
+    base_dir = base_dir or settings.BASE_DIR
+    abspath = os.path.join(os.path.join(base_dir, dir_name), path)
+    mt, dmy = mimetypes.guess_type(abspath)
+    return HttpResponse(
+        File(open(abspath)), content_type=mt)
