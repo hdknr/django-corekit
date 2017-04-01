@@ -272,3 +272,9 @@ def csrf_tag(request):
     return format_html(
         "<input type='hidden' name='csrfmiddlewaretoken' value='{}' />",
         csrf_token)
+
+
+@register.simple_tag(takes_context=False)
+def get_fields(model):
+    '''model fields dict(key=naem, value=Field object'''
+    return methods.CoreModel.get_all_fields(model=model)

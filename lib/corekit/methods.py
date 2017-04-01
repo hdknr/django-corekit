@@ -123,6 +123,12 @@ class CoreModel(object):
         )))
 
     @classmethod
+    def get_all_fields(cls, model=None):
+        '''http://bit.ly/2aJ4Z4t'''
+        model = model or cls
+        return dict((field.name, field) for field in model._meta.get_fields())
+
+    @classmethod
     def derived_models(cls):
         for i in cls._meta.related_objects:
             if all([
