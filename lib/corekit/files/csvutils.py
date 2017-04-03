@@ -27,6 +27,7 @@ class CsvReader(object):
             iterable = StringIO.StringIO(iterable.read().encode(encoding))
         else:
             # force utf8 with nkf module
+            # https://github.com/fumiyas/python-nkf
             self.encoding = 'utf8'
             iterable = StringIO.StringIO(nkf.nkf('-w', iterable.read()))
 
