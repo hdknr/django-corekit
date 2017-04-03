@@ -51,26 +51,6 @@ PREFECTURE_CHOICES = (
     ('', _(u'PREFECTURE_EMPTY')), ) + tuple([(p, p) for p in PREFECTURES])
 
 
-class Posttal(models.Model):
-    # [5, 5, 7, 18, 57, 185, 12, 30, 111, 1, 1, 1, 1, 1, 1]
-    pass
-    # code,
-    # zip5
-    # zip
-    # prefecture_kana
-    # city_kana
-    # town_kana
-    # prefecture
-    # city
-    # town
-    # is_multi_zip
-    # is_koaza
-    # is_choume
-    # is_share_zip
-    # update_type
-    # update_reason
-
-
 class Address(models.Model):
 
     zipcode = models.CharField(
