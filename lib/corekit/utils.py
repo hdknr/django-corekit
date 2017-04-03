@@ -4,6 +4,14 @@ from django.template import Context, Template, loader
 from django.utils.safestring import mark_safe as _S
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth import get_permission_codename
+from django.utils import six
+
+if six.PY3:
+    import io
+    contents = io.BytesIO
+else:
+    import StringIO
+    contents = StringIO.StringIO
 
 import markdown
 from mdx_gfm import GithubFlavoredMarkdownExtension

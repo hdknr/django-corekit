@@ -5,6 +5,7 @@ from django.core.files import File
 from rest_framework import serializers, relations, fields as rest_fields
 from datetime import datetime
 from enum import Enum
+from corekit import utils
 from decimal import Decimal
 import json
 import yaml
@@ -100,8 +101,10 @@ class BaseObjectSerializer(json.JSONEncoder):
         return json.dumps(obj, cls=cls, *args, **kwargs)
 
     @classmethod
-    def to_json_file(cls, obj, *args, **kwargs):
-        return File(cls.to_json(obj, *args, **kwargs))
+    def to_json_file(cls, obj, name=None, *args, **kwargs):
+        name = name or u"{}.json".format(cls.__name__)
+        return File(
+            utils.contents(cls.to_json(obj, *args, **kwargs)), name=name)
 
     @classmethod
     def load_json(cls, jsonstr,  *args, **kwargs):
