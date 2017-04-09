@@ -29,3 +29,20 @@ def dynamic_modelform(data, instance, *args, **kwargs):
     return type(
         model_class._meta.object_name + "Form",
         (forms.ModelForm, ), fields)(data, instance=instance, *args, **kwargs)
+
+
+class ChildrenFormSet(forms.BaseInlineFormSet):
+    FORM_CLASS = None
+
+    @classmethod
+    def factory(cls, data, parent, extra=1, **kwargs):
+        formset_class = cls.create_class(
+            parent._meta.concrete_model, extra=extra)
+        return formset_class(data, instance=parent, **kwargs)
+
+    @classmethod
+    def create_class(cls, parent_class, extra=1):
+        # https://docs.djangoproject.com/en/1.10/ref/forms/models/#inlineformset-factory
+        return forms.inlineformset_factory(
+            parent_class, cls.FORM_CLASS.Meta.model, form=cls.FORM_CLASS,
+            extra=extra, formset=cls)
