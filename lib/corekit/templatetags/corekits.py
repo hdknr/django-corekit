@@ -278,3 +278,11 @@ def csrf_tag(request):
 def get_fields(model):
     '''model fields dict(key=naem, value=Field object'''
     return methods.CoreModel.get_all_fields(model=model)
+
+
+@register.simple_tag(takes_context=True)
+def inject(context, source):
+    ''' Inject Template source string'''
+    head = "{% load i18n humanize static %}"
+    templ = Template(head + source)
+    return templ.render(context)
