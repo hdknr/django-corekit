@@ -8,7 +8,7 @@ from django.contrib.auth import get_permission_codename
 from django.utils.safestring import mark_safe as _S
 from django.forms.models import model_to_dict
 
-
+from collections import OrderedDict
 from itertools import chain
 from utils import force_bool
 import re
@@ -126,7 +126,8 @@ class CoreModel(object):
     def get_all_fields(cls, model=None):
         '''http://bit.ly/2aJ4Z4t'''
         model = model or cls
-        return dict((field.name, field) for field in model._meta.get_fields())
+        return OrderedDict(
+            (field.name, field) for field in model._meta.get_fields())
 
     @classmethod
     def derived_models(cls):

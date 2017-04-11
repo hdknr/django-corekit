@@ -1,9 +1,11 @@
 # encoding: utf-8
 from django.forms.models import model_to_dict
 from django.db.models import Model
+from django.core.files import File
 from rest_framework import serializers, relations, fields as rest_fields
 from datetime import datetime
 from enum import Enum
+from corekit import utils
 from decimal import Decimal
 import json
 import yaml
@@ -40,6 +42,9 @@ class BaseModelSerializer(serializers.ModelSerializer):
                 ret[field.field_name] = represenation
 
         return ret
+
+    def dump(self):
+        return BaseModelSerializer.to_json(self.data)
 
 
 class ExportModelSerializer(serializers.ModelSerializer):
@@ -94,6 +99,12 @@ class BaseObjectSerializer(json.JSONEncoder):
     @classmethod
     def to_json(cls, obj, *args, **kwargs):
         return json.dumps(obj, cls=cls, *args, **kwargs)
+
+    @classmethod
+    def to_json_file(cls, obj, name=None, *args, **kwargs):
+        name = name or u"{}.json".format(cls.__name__)
+        return File(
+            utils.contents(cls.to_json(obj, *args, **kwargs)), name=name)
 
     @classmethod
     def load_json(cls, jsonstr,  *args, **kwargs):
