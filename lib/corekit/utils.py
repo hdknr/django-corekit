@@ -19,6 +19,7 @@ from mimetypes import guess_type
 from distutils.util import strtobool
 import djclick as click
 import re
+import yaml
 
 
 def get_absolute_url(instance, name='detail'):
@@ -134,3 +135,8 @@ def to_gfm(text, safe=True):
     '''Github Favored Markdown'''
     md = markdown.Markdown(extensions=[GithubFlavoredMarkdownExtension()])
     return _S(md.convert(text)) if safe else md.convert(text)
+
+
+def load_template_yaml(name):
+    ''' テンプレート名で指定されたYAMLを読み込む'''
+    return yaml.load(loader.get_template(name).template.source)
