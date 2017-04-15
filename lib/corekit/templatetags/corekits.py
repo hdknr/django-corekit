@@ -43,8 +43,8 @@ def ordering(context, field, key='o'):
     return dict(query=res.urlencode(), direction=direction)
 
 
-@register.assignment_tag()
-def filtering(queryset, *kwargs):
+@register.simple_tag(takes_context=False)
+def filtering(queryset, **kwargs):
     # TODO: security considering
     return queryset.filter(**kwargs)
 
