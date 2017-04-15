@@ -286,3 +286,11 @@ def inject(context, source):
     head = "{% load i18n humanize static %}"
     templ = Template(head + source)
     return templ.render(context)
+
+
+@register.simple_tag
+def object_from(name):
+    '''テンプレートソース(JSON, YAML)をオブジェクトに変換'''
+    source = utils.load_template(name)
+    format = os.path.splitext(name)[1].replace('.', '')
+    return utils.convert(source, format=format)

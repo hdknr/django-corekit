@@ -14,6 +14,7 @@ else:
     contents = StringIO.StringIO
 
 import markdown
+import json
 from mdx_gfm import GithubFlavoredMarkdownExtension
 from mimetypes import guess_type
 from distutils.util import strtobool
@@ -137,6 +138,13 @@ def to_gfm(text, safe=True):
     return _S(md.convert(text)) if safe else md.convert(text)
 
 
-def load_template_yaml(name):
-    ''' テンプレート名で指定されたYAMLを読み込む'''
-    return yaml.load(loader.get_template(name).template.source)
+def convert(source, format='yaml'):
+    if format in ['yaml', 'yml']:
+        return yaml.load(source)
+    if format == 'json':
+        return json.loads(source)
+
+
+def load_template(name):
+    '''名前で指定されたテンプレートのソース'''
+    return loader.get_template(name).template.source
