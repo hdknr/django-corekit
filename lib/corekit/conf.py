@@ -69,7 +69,12 @@ def load_fixtures(path):
             load_model_fixtures(model, item)
 
 
-class GroupPermissionLoader(object):
+class ConfLoader(object):
+    def load(self, conf):
+        raise NotImplemented
+
+
+class GroupPermissionLoader(ConfLoader):
 
     def permit_action(self, group, content_type, action):
         try:
