@@ -90,7 +90,8 @@ class CoreModel(object):
         return get_permission_codename(action, model._meta)
 
     @classmethod
-    def can(cls, user, action, model):
+    def can(cls, user, action, model=None):
+        model = model or cls
         perm = cls.perm_name(action, model)
         return user.has_perm(perm, model)
 
