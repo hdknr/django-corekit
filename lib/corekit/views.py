@@ -37,8 +37,10 @@ class View(object):
         self.request = request
 
     @classmethod
-    def handler(cls, url='', name='', order=0, decorators=None):
+    def handler(cls, url='', name='', order=0, decorators=None, perms=[]):
         decorators = decorators or [lambda x: x]
+        if perms:
+            decorators += [auth_decos.permission_required(p) for p in perms]
 
         def _handler(func):
 
