@@ -46,3 +46,19 @@ class ChildrenFormSet(forms.BaseInlineFormSet):
         return forms.inlineformset_factory(
             parent_class, cls.FORM_CLASS.Meta.model, form=cls.FORM_CLASS,
             extra=extra, formset=cls)
+
+
+class ModelFormSet(forms.BaseModelFormSet):
+    FORM_CLASS = None
+
+    @classmethod
+    def create_class(cls, extra=1):
+        # https://docs.djangoproject.com/en/1.11/ref/forms/models/#modelformset-factory
+        return forms.modelformset_factory(
+            cls.FORM_CLASS.Meta.model, form=cls.FORM_CLASS,
+            extra=extra, formset=cls)
+
+    @classmethod
+    def factory(cls, data, queryset, extra=1, **kwargs):
+        formset_class = cls.create_class(extra=extra)
+        return formset_class(data, queryset=queryset, **kwargs)
