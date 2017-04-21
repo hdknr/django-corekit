@@ -294,3 +294,9 @@ def object_from(name):
     source = utils.load_template(name)
     format = os.path.splitext(name)[1].replace('.', '')
     return utils.convert(source, format=format)
+
+
+@register.simple_tag(takes_context=False)
+def assign(value):
+    '''変数として設定するために値を返す'''
+    return value
