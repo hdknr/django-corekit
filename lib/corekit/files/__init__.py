@@ -4,6 +4,7 @@ from django.conf import settings
 from django.utils.deconstruct import deconstructible
 from django.core.files.storage import FileSystemStorage
 from django.utils import encoding
+from django.urls import reverse
 
 from .csvutils import CsvReader, CsvWriter
 from .xlsxutils import XlsxReader, XlsxWriter, XlsxBaseReader
@@ -81,3 +82,15 @@ def create_writer(mimetype, *args, **kwargs):
         CsvWriter.MIMETYPE: CsvWriter,
         XlsxWriter.MIMETYPE: XlsxWriter,
     }[mimetype](*args, **kwargs)
+
+
+class FileStorage(FileSystemStorage):
+    location = settings.MEDIAFILES_LOCATION
+
+    def url(self, name, headers=None, response_headers=None, expire=None):
+        if name and name.startswith('protected'):
+            return reverse('corekit_download_stub', kwargs={'name': name})
+        res = super(FileStorage, self).url(
+            name, headers=headers, response_headers=response_headers,
+            expire=expire)
+        return res
