@@ -85,7 +85,6 @@ def create_writer(mimetype, *args, **kwargs):
 
 
 class FileStorage(FileSystemStorage):
-    location = settings.MEDIAFILES_LOCATION
 
     def url(self, name, headers=None, response_headers=None, expire=None):
         if name and name.startswith('protected'):
