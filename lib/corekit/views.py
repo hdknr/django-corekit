@@ -136,6 +136,10 @@ class View(object):
     def not_authorized(self, msg='Unauthorized'):
         return HttpResponse(msg, status=401)
 
+    def serialize(self, serializer, filename, res=responses.FileResponse):
+        return res(filename=filename).serialize(serializer)
+
+
 handler = View.handler
 
 
