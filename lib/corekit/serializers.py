@@ -49,6 +49,10 @@ class BaseModelSerializer(serializers.ModelSerializer):
 
 class ExportModelSerializer(serializers.ModelSerializer):
 
+    def __init__(self, *args, **kwargs):
+        self.verbose_field = kwargs.pop('verbose_field', True)
+        super(ExportModelSerializer, self).__init__(*args, **kwargs)
+
     def to_representation(self, instance):
         '''(override)'''
         ret = OrderedDict()
@@ -56,8 +60,11 @@ class ExportModelSerializer(serializers.ModelSerializer):
 
         for field in fields:
             # translated field names
-            name = u"{}".format(self.Meta.model._meta.get_field(
-                field.field_name).verbose_name)
+            if self.verbose_field:
+                name = u"{}".format(self.Meta.model._meta.get_field(
+                    field.field_name).verbose_name)
+            else:
+                name = field.field_name
             try:
                 attribute = field.get_attribute(instance)
             except rest_fields.SkipField:
