@@ -47,7 +47,8 @@ class XlsxReader(XlsxBaseReader):
     def __iter__(self):
         header = list(self.headers or [])
         line = -1
-        for row in self.book.worksheets[self.sheet].rows:
+        for row in self.book.worksheets[self.sheet].iter_rows(
+                row_offset=self.skip):
             line += 1
             if line == 0 and len(header) == 0:
                 header = [v and v.strip() for v in self.row_values(row)]
