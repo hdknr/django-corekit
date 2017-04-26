@@ -86,7 +86,7 @@ def to_admin_changelist_url(instance_or_class):
 
 def spaceless(src):
     '''空白を取り除く'''
-    return re.sub(ur'[\s\u3000]', '', src)
+    return re.sub(ur'[\s\u3000]', '', src or '')
 
 
 def render(src, ctxobj=None, **ctx):
