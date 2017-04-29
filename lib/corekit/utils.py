@@ -2,6 +2,7 @@
 from django.core.urlresolvers import reverse
 from django.template import Context, Template, loader
 from django.utils.safestring import mark_safe as _S
+from django.utils import timezone
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth import get_permission_codename
 from django.utils import six
@@ -21,6 +22,8 @@ from distutils.util import strtobool
 import djclick as click
 import re
 import yaml
+import time
+import struct
 
 
 def get_absolute_url(instance, name='detail'):
@@ -148,3 +151,9 @@ def convert(source, format='yaml'):
 def load_template(name):
     '''名前で指定されたテンプレートのソース'''
     return loader.get_template(name).template.source
+
+
+def time_serial():
+    '''時間のシリアル値を16進数で返す'''
+    now = time.mktime(timezone.now().timetuple())
+    return hex(struct.unpack('<I', struct.pack('<f', now))[0])[2:]
