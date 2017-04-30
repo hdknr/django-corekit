@@ -28,9 +28,9 @@ def ipafont(ctx):
 
 @main.command()
 @click.argument('app_label')
-@click.option('--subdocs', is_flag=True)
+@click.option('--subdocs', '-s', is_flag=True)
 @click.pass_context
-def generate_doc(self, app_label, subdocs):
+def doc_models(self, app_label, subdocs):
     from django.apps import apps
     from django.db import connections
     con = connections['default']      # TODO
@@ -38,3 +38,36 @@ def generate_doc(self, app_label, subdocs):
     click.echo(utils.render_by(
         'corekit/db/models.rst',
         app=app, connection=con, subdoc=subdocs))
+
+
+_format = dict(
+    line='{{module}}.{{object_name}} {{db_table}}',
+    sphinx='''
+.. _{{module}}.{{object_name}}:
+{{object_name}}
+{{sep}}
+.. autoclass:: {{module}}.{{object_name}}
+    :members:
+''',
+)
+
+
+@main.command()
+@click.argument('app_labels', nargs=-1)
+@click.option('--format', '-f', default='sphinx', help="format=[line|sphinx]")
+@click.pass_context
+def list_models(ctx, app_labels, format):
+    '''List Models'''
+    from django.apps import apps
+
+    for app_label in app_labels:
+        conf = apps.get_app_config(app_label)
+        for model in conf.get_models():
+            data = {
+                "app_label": app_label,
+                "module": model.__module__,
+                "object_name": model._meta.object_name,
+                "sep": '-' * len(model._meta.object_name),
+                "db_table": model._meta.db_table,
+            }
+            click.echo(utils.render(_format[format], **data))
