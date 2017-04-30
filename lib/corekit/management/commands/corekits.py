@@ -46,15 +46,3 @@ def zipball(ctx, model):
     model_class = methods.CoreModel.contenttype_model(model)
     with open('/tmp/{}.zip'.format(model), 'w') as zipfile:
         querysets.CoreQuerySet(model_class).zipball(zipfile)
-
-
-@main.command()
-@click.pass_context
-def ipafont(ctx):
-    '''IPA Font'''
-    from io import BytesIO
-    import requests
-    import zipfile
-    url = 'http://dl.ipafont.ipa.go.jp/IPAexfont/IPAexfont00301.zip'
-    zf = zipfile.ZipFile(BytesIO(requests.get(url).content))
-    zf.extractall()
