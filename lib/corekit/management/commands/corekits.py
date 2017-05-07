@@ -3,7 +3,7 @@ from django.utils import translation
 from django.core.cache import cache
 
 from corekit.conf import load_conf, load_fixtures
-from corekit import methods, querysets
+from corekit import methods, querysets, utils
 import djclick as click
 from logging import getLogger
 log = getLogger()
@@ -46,3 +46,14 @@ def zipball(ctx, model):
     model_class = methods.CoreModel.contenttype_model(model)
     with open('/tmp/{}.zip'.format(model), 'w') as zipfile:
         querysets.CoreQuerySet(model_class).zipball(zipfile)
+
+
+@main.command()
+@click.option('--database', '-d', default='default')
+@click.pass_context
+def createdb_sql(ctx, database):
+    '''create database'''
+    from django.conf import settings
+    conf = settings.DATABASES[database]
+    click.echo(utils.render_by(
+        'corekit/db/createdb.sql', conf=conf))

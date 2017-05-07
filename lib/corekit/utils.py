@@ -2,7 +2,6 @@
 from django.core.urlresolvers import reverse
 from django.template import Context, Template, loader
 from django.utils.safestring import mark_safe as _S
-from django.utils import timezone
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth import get_permission_codename
 from django.utils import six
@@ -155,5 +154,4 @@ def load_template(name):
 
 def time_serial():
     '''時間のシリアル値を16進数で返す'''
-    now = time.mktime(timezone.now().timetuple())
-    return hex(struct.unpack('<I', struct.pack('<f', now))[0])[2:]
+    return struct.pack('d', time.time()).encode('hex')
