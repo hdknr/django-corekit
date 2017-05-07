@@ -23,12 +23,24 @@ def media_path(context, bulletin):
     return SafeText('media path')
 
 
-@register.assignment_tag(takes_context=True)
+@register.simple_tag(takes_context=True)
 def ordering(context, field, key='o'):
-    qdict = context.get('request').GET
-    res = qdict.copy()
-    rfield = '-' + field
+    '''
+    {% load corekits %}
+    <style>
+    .sort-asc:after{content: "Down"}
+    .sort-desc:after{content: "Up"}
+    </style>
+
+    <th>
+    {% ordering 'id' as id_order %}
+        <a href="?{{ id_order.query }}"> No.</a>
+        <i class="sort-{{ id_order.direction }}"></i>
+    </th>
+    '''
+    res = context.get('request').GET.copy()
     q = res.getlist(key)
+    rfield = '-' + field
     if rfield in q:
         q.remove(rfield)
         direction = "asc"
