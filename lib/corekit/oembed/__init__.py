@@ -1,39 +1,42 @@
 # coding: utf-8
-''' http://oembed.com/ '''
-from corekit import utils
-from django.http.request import QueryDict
+from django.utils.http import urlquote
+from django.core.cache import cache
+from bs4 import BeautifulSoup as Soup
 import requests
+import re
+
+TWITTER = "https://publish.twitter.com/oembed?url={url}"
+INSTAGRAM = "https://api.instagram.com/oembed/?url={url}"
+YOUTUBE = "http://www.youtube.com/oembed?url={url}&format=json"
 
 
-def twitter_embed_html(url):
-    return requests.get(
-        'https://publish.twitter.com/oembed', params={'url': url}
-    ).json().get('html', '')
+PATTERN = [
+    (r'(?P<scheme>https)\://(?P<host>www.youtube.com)(?P<path>/watch.+)', YOUTUBE),   # NOQA
+    (r'(?P<scheme>https)\://(?P<host>www.instagram.com)(?P<path>/p/.+/)$', INSTAGRAM),  # NOQA
+    (r'(?P<scheme>https)\://(?P<host>twitter.com)(?P<path>.+)$', TWITTER),
+]
 
 
-def instagram_embed_html(url):
-    uo = utils.url(url)
-    return utils.render(
-        '''<iframe src="//instagram.com{{ uo.path }}embed/"
-        width="612" height="710" frameborder="0"
-        scrolling="no" allowtransparency="true"></iframe>''',
-        uo=uo)
+def find_url(url):
+    res = requests.get(url)
+    if res and res.status_code == 200 \
+            and res.headers.get('Content-Type', '').startswith('text/html'):
+        soup = Soup(res.text, 'html.parser')
+        items = soup and soup.select('link[type="application/json+oembed"]')
+        return items and items[0].attrs['href']
 
 
-def youtube_embed_html(url):
-    uo = utils.url(url)
-    q = QueryDict(uo.query)
-    return utils.render(
-        '''<iframe width="560" height="315"
-        src="https://www.youtube.com/embed/{{ q.v }}"
-        frameborder="0" allowfullscreen></iframe>''',
-        q=q)
+def get_url(url):
+    for pattern in PATTERN:
+        match = re.search(pattern[0], url)
+        if match:
+            return pattern[1].format(url=urlquote(url), **match.groupdict())
+    return find_url(url)
 
 
 def get_html(url):
-    uo = utils.url(url)
-    return {
-        'twitter.com': twitter_embed_html,
-        'www.instagram.com': instagram_embed_html,
-        'www.youtube.com': youtube_embed_html,
-    }.get(uo.netloc, lambda o: '')(url)
+    html = cache.get("oembed:" + url)
+    if not html:
+        html = requests.get(get_url(url)).json().get('html', None)
+        cache.set("oembed:" + url, html)
+    return html
