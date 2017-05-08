@@ -10,7 +10,7 @@ from django.utils import formats
 from django.utils.html import format_html
 from django.middleware.csrf import get_token
 from django.apps import registry
-from corekit import (utils, methods)
+from corekit import (utils, methods, oembed as oe)
 from datetime import date
 import json
 import os
@@ -312,3 +312,9 @@ def object_from(name):
 def assign(value):
     '''変数として設定するために値を返す'''
     return value
+
+
+@register.simple_tag(takes_context=False)
+def oembed(url):
+    '''oEmbed HTML を返す'''
+    return _S(oe.get_html(url))
