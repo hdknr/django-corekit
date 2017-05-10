@@ -20,6 +20,9 @@ django-storages
 markdown
 py-gfm
 
+# HTML
+beautifulsoup4
+
 # Excel
 openpyxl
 xlwt
