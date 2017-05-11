@@ -22,6 +22,10 @@ def schemaspy_command(database):
     $ git clone https://github.com/schemaspy/schemaspy.git
     $ cd schemaspy
     $ ./mvnw install
+
+    prerequieste:
+
+    $ sudo apt-get install default-jdk default-jre libmysql-java
     '''
     db = settings.DATABASES[database]
     engine = {'django.db.backends.mysql': 'mysql', }.get(db['ENGINE'], '')
