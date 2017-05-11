@@ -2,6 +2,7 @@
 from django.utils import translation
 import djclick as click
 from corekit import utils
+from corekit.docs.conf import schemaspy_command
 from logging import getLogger
 log = getLogger()
 
@@ -71,3 +72,11 @@ def list_models(ctx, app_labels, format):
                 "db_table": model._meta.db_table,
             }
             click.echo(utils.render(_format[format], **data))
+
+
+@main.command()
+@click.option('--database', '-d', default='default')
+@click.pass_context
+def schemaspy(ctx, database):
+    ''' SchemaSpy '''
+    click.echo(schemaspy_command(database))

@@ -1,15 +1,11 @@
 # coding: utf-8
 from django.http import HttpResponse
 from django.core.files import File
-from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
+from .conf import DOCUMENT_BASE
 import os
 import mimetypes
 import re
-
-
-DOCUMENT_BASE = getattr(
-    settings, 'DOCUMENT_BASE', os.path.join(settings.BASE_DIR, 'docs'))
 
 
 def _path(path):
