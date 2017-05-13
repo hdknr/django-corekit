@@ -1,15 +1,16 @@
 # -*- coding: utf-8 -*-
 from django import template, forms
+from django.apps import registry
 from django.conf import settings
-from django.db.models import Model, Manager, QuerySet, ImageField
-from django.utils.safestring import SafeText, mark_safe as _S
-from django.utils.translation import ugettext_lazy as _
 from django.core.serializers.json import DjangoJSONEncoder
+from django.db.models import Model, Manager, QuerySet, ImageField
+from django.http.request import QueryDict
+from django.middleware.csrf import get_token
 from django.template import Context, Template, loader
 from django.utils import formats
 from django.utils.html import format_html
-from django.middleware.csrf import get_token
-from django.apps import registry
+from django.utils.safestring import SafeText, mark_safe as _S
+from django.utils.translation import ugettext_lazy as _
 from corekit import (utils, methods, oembed as oe)
 from datetime import date
 import json
@@ -318,3 +319,12 @@ def assign(value):
 def oembed(url):
     '''oEmbed HTML を返す'''
     return _S(oe.get_html(url).get('html'))
+
+
+@register.simple_tag
+def gmap(address, lat=None, lng=None, template='corekit/gmap.html'):
+    '''Google Map'''
+    param = dict(q=address,)
+    qd = QueryDict(mutable=True)
+    qd.update(param)
+    return utils.render_by(template, gmap=qd, lat=lat, lng=lng)

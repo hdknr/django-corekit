@@ -6,6 +6,7 @@ from django.utils.six.moves.urllib.parse import urlparse
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth import get_permission_codename
 from django.utils import six
+from django import VERSION
 
 if six.PY3:
     import io
@@ -94,13 +95,17 @@ def spaceless(src):
 
 def render(src, ctxobj=None, **ctx):
     '''テンプレート文字列でレンダリングする'''
+
     ctxobj = ctxobj or Context(ctx)
     return _S(Template(src).render(ctxobj))
 
 
 def render_by(name, ctxobj=None, **ctx):
     '''テンプレートファイルでレンダリングする'''
-    ctxobj = ctxobj or Context(ctx)
+    if VERSION > (1, 10):
+        ctxobj = ctx
+    else:
+        ctxobj = ctxobj or Context(ctx)
     return _S(loader.get_template(name).render(ctxobj))
 
 
