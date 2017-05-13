@@ -317,4 +317,4 @@ def assign(value):
 @register.simple_tag(takes_context=False)
 def oembed(url):
     '''oEmbed HTML を返す'''
-    return _S(oe.get_html(url))
+    return _S(oe.get_html(url).get('html'))
