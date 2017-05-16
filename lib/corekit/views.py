@@ -190,7 +190,7 @@ def download(request, access, app_label, model_name, field_name, path):
     model_class = ct.model_class()
     action = 'download_{}'.format(field_name)
     perm = methods.CoreModel.perm_name(action, model=model_class)
-    full = "{}/{}/{}/{}/{}".format(
+    full = u"{}/{}/{}/{}/{}".format(
         access, app_label, model_name, field_name, path)
     query = Q(**{field_name: path}) | Q(**{field_name: full})
     instance = model_class.objects.filter(query).first()
