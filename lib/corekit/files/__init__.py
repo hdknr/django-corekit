@@ -5,6 +5,7 @@ from django.utils.deconstruct import deconstructible
 from django.core.files.storage import FileSystemStorage
 from django.utils import encoding
 from django.urls import reverse
+from django import VERSION
 
 from .csvutils import CsvReader, CsvWriter
 from .xlsxutils import XlsxReader, XlsxWriter, XlsxBaseReader
@@ -49,7 +50,8 @@ class UploadPath(object):
         name = encoding.force_unicode(name)
         ret = u'{}/{}'.format(
             cls.get_base_url(access, app_label, model_name, field_name), name)
-        return UQ(ret).decode('utf8')
+
+        return UQ(ret) if VERSION > (1, 10) else UQ(ret).decode('utf8')
 
 
 def get_local_storage(base_dir, access, app_label, model_name, field_name):
