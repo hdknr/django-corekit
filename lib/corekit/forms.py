@@ -35,10 +35,10 @@ class ChildrenFormSet(forms.BaseInlineFormSet):
     FORM_CLASS = None
 
     @classmethod
-    def factory(cls, data, parent, extra=1, **kwargs):
+    def factory(cls, data, parent, extra=1, files=None, **kwargs):
         formset_class = cls.create_class(
             parent._meta.concrete_model, extra=extra)
-        return formset_class(data, instance=parent, **kwargs)
+        return formset_class(data, files or None, instance=parent, **kwargs)
 
     @classmethod
     def create_class(cls, parent_class, extra=1):

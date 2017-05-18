@@ -54,6 +54,6 @@ def zipball(ctx, model):
 def createdb_sql(ctx, database):
     '''create database'''
     from django.conf import settings
-    conf = settings.DATABASES[database]
+    conf = settings.DATABASES.get(database)
     click.echo(utils.render_by(
         'corekit/db/createdb.sql', conf=conf))
