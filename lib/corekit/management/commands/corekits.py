@@ -48,6 +48,18 @@ def zipball(ctx, model):
         querysets.CoreQuerySet(model_class).zipball(zipfile)
 
 
+CREATEDB = '''
+
+{% if conf.ENGINE == 'django.db.backends.mysql' %}
+CREATE DATABASE {{ conf.NAME}}
+DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+GRANT ALL on {{ conf.NAME }}.*
+to '{{ conf.USER }}'@'{{ conf.SOURCE|default:"localhost" }}'
+identified by '{{ conf.PASSWORD }}' WITH GRANT OPTION;
+{% endif %}
+'''
+
+
 @main.command()
 @click.option('--database', '-d', default='default')
 @click.pass_context
@@ -55,5 +67,4 @@ def createdb_sql(ctx, database):
     '''create database'''
     from django.conf import settings
     conf = settings.DATABASES.get(database)
-    click.echo(utils.render_by(
-        'corekit/db/createdb.sql', conf=conf))
+    click.echo(utils.render(CREATEDB, conf=conf))
