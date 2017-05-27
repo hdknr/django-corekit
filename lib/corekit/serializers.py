@@ -2,6 +2,7 @@
 from django.forms.models import model_to_dict
 from django.db.models import Model
 from django.core.files import File
+from django.db.models.fields.files import FieldFile
 from rest_framework import serializers, relations, fields as rest_fields
 from datetime import datetime
 from enum import Enum
@@ -86,8 +87,11 @@ class ExportModelSerializer(serializers.ModelSerializer):
 class BaseObjectSerializer(json.JSONEncoder):
 
     def default(self, obj):
+
         if isinstance(obj, Model):
             return model_to_dict(obj)
+        if isinstance(obj, FieldFile):
+            return {'url': obj.url, 'name': obj.name}
         if isinstance(obj, Enum):
             return obj.value
         if isinstance(obj, datetime):
@@ -100,7 +104,6 @@ class BaseObjectSerializer(json.JSONEncoder):
             vals.update(getattr(obj, '__dict__', {}))
             return dict([(k, v) for k, v in vals.items()
                          if k not in ex and not k.startswith('_') and v])
-
         return super(BaseObjectSerializer, self).default(obj)
 
     @classmethod
@@ -119,4 +122,8 @@ class BaseObjectSerializer(json.JSONEncoder):
 
     @classmethod
     def to_yaml(cls, obj, *args, **kwargs):
-        return yaml.safe_dump(json.loads(cls.to_json(obj, *args, **kwargs)))
+        return yaml.safe_dump(obj, *args, **kwargs)
+
+    @classmethod
+    def to_dict(cls, obj, *args, **kwargs):
+        return json.loads(cls.to_json(obj, *args, **kwargs))
