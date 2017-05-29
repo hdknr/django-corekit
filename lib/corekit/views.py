@@ -29,6 +29,9 @@ from . import methods, querysets, responses, utils
 from operator import itemgetter
 
 
+DOWNLOAD_ACCESS_CHECK = getattr(
+    settings, 'DOWNLOAD_ACCESS_CHECK', ['private', 'protected'])
+
 never_cache = never_cache
 
 
@@ -194,7 +197,8 @@ def download(request, access, app_label, model_name, field_name, path):
         access, app_label, model_name, field_name, path)
     query = Q(**{field_name: path}) | Q(**{field_name: full})
     instance = model_class.objects.filter(query).first()
-    if access == 'protected' and not request.user.has_perm(perm, instance):
+    if access in DOWNLOAD_ACCESS_CHECK and \
+            not request.user.has_perm(perm, instance):
         return HttpResponseForbidden()
 
     value = getattr(instance, field_name)
