@@ -333,6 +333,8 @@ def gmap(address, lat=None, lng=None, template='corekit/gmap.html'):
 @register.simple_tag
 def in_pager_range(page, width=7):
     r = page.paginator.page_range
+    if width not in r:
+        return list(r)
     res = range(1, width + 1) \
         + range(page.number - (width - 1) / 2, page.number + width - 1) \
         + range(r[-width] / 2, r[-width] / 2 + width) \
