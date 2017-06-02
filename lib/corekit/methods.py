@@ -16,17 +16,22 @@ from .serializers import BaseObjectSerializer as Sz
 
 
 class CoreModel(object):
-    def get_absolute_url(self):
+
+    @classmethod
+    def reverse(self, *args, **kwargs):
+        return reverse(*args, **kwargs)
+
+    @classmethod
+    def get_url(self, handler, opt, id):
         return reverse(
-            '{0}_{1}_detail'.format(
-                self._meta.app_label, self._meta.model_name),
-            kwargs={'id': self.id})
+            '{0}_{1}_{2}'.format(opt.app_label, opt.model_name, handler),
+            kwargs={'id': id})
+
+    def get_absolute_url(self):
+        return self.get_url('detail', self._meta, self.id)
 
     def get_edit_url(self):
-        return reverse(
-            '{0}_{1}_edit'.format(
-                self._meta.app_label, self._meta.model_name),
-            kwargs={'id': self.id})
+        return self.get_url('edit', self._meta, self.id)
 
     @classmethod
     def admin_change_url_name(cls, model=None):
