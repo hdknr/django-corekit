@@ -25,7 +25,7 @@ def media_path(context, bulletin):
 
 
 @register.simple_tag(takes_context=True)
-def ordering(context, field, key='o'):
+def ordering(context, field, key='o', default='asc'):
     '''
     {% load corekits %}
     <style>
@@ -45,13 +45,14 @@ def ordering(context, field, key='o'):
     if rfield in q:
         q.remove(rfield)
         direction = "asc"
-    else:
-        if field in q:
-            q.remove(field)
-        field = rfield
+    elif field in q:
+        q.remove(field)
         direction = "desc"
+    else:
+        direction = 'desc' if default == 'asc' else 'asc'
 
-    q = [field] + q
+    q = [field if direction == 'asc' else rfield] + q
+
     res.setlist(key, q)
     return dict(query=res.urlencode(), direction=direction)
 
