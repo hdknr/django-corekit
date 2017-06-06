@@ -11,7 +11,8 @@ from django.utils import formats
 from django.utils.html import format_html
 from django.utils.safestring import SafeText, mark_safe as _S
 from django.utils.translation import ugettext_lazy as _
-from corekit import (utils, methods, oembed as oe)
+from corekit import (utils, methods, oembed as oe, auth)
+from django.contrib.sites.models import Site
 from datetime import date
 import json
 import os
@@ -341,3 +342,13 @@ def in_pager_range(page, width=7):
         + range(r[-width] / 2, r[-width] / 2 + width) \
         + range(r[-width], r[-width] + width)
     return res
+
+
+@register.simple_tag
+def user_token(user):
+    return auth.create_user_token(user)
+
+
+@register.simple_tag
+def current_site():
+    return Site.objects.get_current()
