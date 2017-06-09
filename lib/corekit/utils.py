@@ -166,3 +166,8 @@ def time_serial():
 def url(url_string):
     '''urlparse'''
     return urlparse(url_string)
+
+
+def permcode_items(perm_code):
+    p = re.split(r"[._]", perm_code) + [None, None, None]
+    return dict(zip(['app_label', 'action', 'model'], p[:3]))
