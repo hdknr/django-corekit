@@ -49,7 +49,6 @@ def zipball(ctx, model):
 
 
 CREATEDB = '''
-
 {% if conf.ENGINE == 'django.db.backends.mysql' %}
 CREATE DATABASE {{ conf.NAME}}
 DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
@@ -68,3 +67,21 @@ def createdb_sql(ctx, database):
     from django.conf import settings
     conf = settings.DATABASES.get(database)
     click.echo(utils.render(CREATEDB, conf=conf))
+
+
+DUMPDB_COMMAND = '''
+{% if conf.ENGINE == 'django.db.backends.mysql' %}
+mysqldump -u {{ conf.USER }} --password={{ conf.PASSWORD }} {{ conf.NAME }}
+{% endif %}'''
+
+
+@main.command()
+@click.option('--database', '-d', default='default')
+@click.pass_context
+def dumpdb_command(ctx, database):
+    '''create database'''
+    from django.conf import settings
+    conf = settings.DATABASES.get(database)
+    click.echo("".join(
+        [s for s in
+         utils.render(DUMPDB_COMMAND, conf=conf).splitlines() if s]))
