@@ -103,17 +103,19 @@ class View(object):
             return (span.seconds < hours * 3600)
         return auth_decos.user_passes_test(_test, **kwargs)
 
-    def render(self, template_name, with_cors=False, **kwargs):
-        res = TemplateResponse(
+    def render(self, template_name, content_type=None, **kwargs):
+        return TemplateResponse(
             self.request, template_name,
-            dict(view=self, request=self.request, **kwargs))
-        return with_cors and responses.cors(res) or res
+            content_type=content_type,
+            context=dict(view=self, request=self.request, **kwargs))
 
-    def render_source(self, source, with_cors=False, **kwargs):
-        res = HttpResponse(
+    def render_source(self, source,  **kwargs):
+        return HttpResponse(
             utils.render(
                 source, RequestContext(self.request, kwargs)))
-        return with_cors and responses.cors(res) or res
+
+    def cors(self, res, *args, **kwargs):
+        return responses.cors(res, *args, **kwargs)
 
     @classmethod
     def redirect(cls, *args, **kwargs):
