@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-from django import template, forms
+from django import template, forms, VERSION
 from django.apps import registry
 from django.conf import settings
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models import Model, Manager, QuerySet, ImageField
 from django.http.request import QueryDict
 from django.middleware.csrf import get_token
-from django.template import Context, Template, loader
+from django.template import Template, loader
 from django.utils import formats
 from django.utils.html import format_html
 from django.utils.safestring import SafeText, mark_safe as _S
@@ -16,6 +16,12 @@ from django.contrib.sites.models import Site
 from datetime import date
 import json
 import os
+
+if VERSION > (1, 10):
+    Context = dict
+else:
+    from django.template import Context
+
 
 register = template.Library()
 
@@ -206,12 +212,14 @@ def app_config(obj):
     return registry.apps.get_app_config(getattr(obj, 'app_label', ''))
 
 
-def render(src, **ctx):
-    return _S(Template(src).render(Context(ctx)))
+@register.simple_tag
+def render(src, request=None, **ctx):
+    return _S(Template(src).render(Context(ctx)), request=request)
 
 
-def render_by(name, **ctx):
-    return _S(loader.get_template(name).render(Context(ctx)))
+@register.simple_tag
+def render_by(name, request=None, **ctx):
+    return _S(loader.get_template(name).render(Context(ctx), request=request))
 
 
 @register.filter
