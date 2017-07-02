@@ -16,6 +16,11 @@ class OembedView(core_views.View):
         url=r'^(?P<content_type>.+)/(?P<id>\d+)$',
         name="corekit_oembed_api", order=20, )
     def api(self, request, content_type, id):
+        '''
+        <link rel="alternate" type="application/json+oembed"
+         href="{% fullurl 'corekit_oembed_api'
+            content_type='blogs.article' id=instance.id %}" >
+        '''
         instance = self.get_instance(content_type, id)
         if not instance:
             return self.page_not_found()
