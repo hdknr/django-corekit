@@ -12,6 +12,7 @@ djangorestframework
 rest-pandas
 furl
 requests
+django-fullurl
 
 # Backend
 django-storages

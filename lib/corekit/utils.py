@@ -93,20 +93,20 @@ def spaceless(src):
     return re.sub(ur'[\s\u3000]', '', src or '')
 
 
-def render(src, ctxobj=None, **ctx):
+def render(src, ctxobj=None, request=None, **ctx):
     '''テンプレート文字列でレンダリングする'''
 
     ctxobj = ctxobj or Context(ctx)
-    return _S(Template(src).render(ctxobj))
+    return _S(Template(src).render(ctxobj, request=request))
 
 
-def render_by(name, ctxobj=None, **ctx):
+def render_by(name, ctxobj=None, request=None, **ctx):
     '''テンプレートファイルでレンダリングする'''
     if VERSION > (1, 10):
         ctxobj = ctx
     else:
         ctxobj = ctxobj or Context(ctx)
-    return _S(loader.get_template(name).render(ctxobj))
+    return _S(loader.get_template(name).render(ctxobj, request=request))
 
 
 def echo(teml, fg="green", **kwargs):
