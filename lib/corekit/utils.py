@@ -93,11 +93,12 @@ def spaceless(src):
     return re.sub(ur'[\s\u3000]', '', src or '')
 
 
-def render(src, ctxobj=None, request=None, **ctx):
+def render(src, request=None, **ctx):
     '''テンプレート文字列でレンダリングする'''
 
-    ctxobj = ctxobj or Context(ctx)
-    return _S(Template(src).render(ctxobj, request=request))
+    from django.template import engines
+    engine = engines['django']
+    return _S(engine.from_string(src).render(ctx, request=request))
 
 
 def render_by(name, ctxobj=None, request=None, **ctx):

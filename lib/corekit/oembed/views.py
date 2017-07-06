@@ -13,57 +13,61 @@ class OembedView(core_views.View):
         return methods.CoreModel.contenttype_instance(content_type_key, id)
 
     @core_views.handler(
-        url=r'^(?P<content_type>.+)/(?P<id>\d+)$',
+        url=r'^(?P<content_type>[^/]+)(?:/(?P<style>[^/]+))?/(?P<id>\d+)$',
         name="corekit_oembed_api", order=20, )
-    def api(self, request, content_type, id):
+    def api(self, request, content_type, style, id):
         '''
         <link rel="alternate" type="application/json+oembed"
          href="{% fullurl 'corekit_oembed_api'
             content_type='blogs.article' id=instance.id %}" >
         '''
+        style = style or 'default'
         instance = self.get_instance(content_type, id)
         if not instance:
             return self.page_not_found()
 
-        template = "oembed/{}/oembed.json".format(content_type)
+        template = "oembed/{}/{}/oembed.json".format(content_type, style)
         default = json.loads(
             render_by(template, request=request, instance=instance))
-        embed_html = "oembed/{}/embed.html".format(content_type)
+        embed_html = "oembed/{}/{}/embed.html".format(content_type, style)
         default['html'] = render_by(
             embed_html, request=request, instance=instance)
         return self.cors(self.json(default), origin='*')
 
     @core_views.handler(
-        url=r'^(?P<content_type>.+)/(?P<id>\d+)/embed$',
+        url=r'^(?P<content_type>[^/]+)(?:/(?P<style>[^/]+))?/(?P<id>\d+)/embed$',   # NOQA
         name="corekit_oembed_embed", order=20, )
-    def embed(self, request, content_type, id):
+    def embed(self, request, content_type, style, id):
+        style = style or 'default'
         instance = self.get_instance(content_type, id)
         if not instance:
             return self.page_not_found()
 
-        template = "oembed/{}/embed.html".format(content_type)
+        template = "oembed/{}/{}/embed.html".format(content_type, style)
         return self.default_render(instance, template)
 
     @core_views.handler(
-        url=r'^(?P<content_type>.+)/(?P<id>\d+)/widget$',
+        url=r'^(?P<content_type>[^/]+)(?:/(?P<style>[^/]+))?/(?P<id>\d+)/widget$',  # NOQA
         name="corekit_oembed_widget", order=20, )
-    def widget(self, request, content_type, id):
+    def widget(self, request, content_type, style, id):
+        style = style or 'default'
         instance = self.get_instance(content_type, id)
         if not instance:
             return self.page_not_found()
 
-        template = "oembed/{}/widget.html".format(content_type)
+        template = "oembed/{}/{}/widget.html".format(content_type, style)
         return self.default_render(instance, template)
 
     @core_views.handler(
-        url=r'^(?P<content_type>.+)/(?P<id>\d+)/widget.js',
+        url=r'^(?P<content_type>[^/]+)(?:/(?P<style>[^/]+))?/(?P<id>\d+)/widget.js',   # NOQA
         name="corekit_oembed_script", order=20, )
-    def script(self, request, content_type, id):
+    def script(self, request, content_type, style, id):
+        style = style or 'default'
         instance = self.get_instance(content_type, id)
         if not instance:
             return self.page_not_found()
 
-        template = "oembed/{}/widget.js".format(content_type)
+        template = "oembed/{}/{}/widget.js".format(content_type, style)
         return self.default_render(
             instance, template,  'application/json; charset=utf-8')
 
