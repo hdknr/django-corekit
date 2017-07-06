@@ -14,7 +14,6 @@ from django.core.urlresolvers import reverse
 from django.db.models import Q
 from django.db.models.query import Prefetch
 from django.http import HttpResponse, Http404, HttpResponseForbidden
-from django.template import RequestContext
 from django.template.response import TemplateResponse
 from django.utils import timezone
 from django.utils.decorators import method_decorator as _M
@@ -111,8 +110,7 @@ class View(object):
 
     def render_source(self, source,  **kwargs):
         return HttpResponse(
-            utils.render(
-                source, RequestContext(self.request, kwargs)))
+            utils.render(source, request=self.request, **kwargs))
 
     def cors(self, res, *args, **kwargs):
         return responses.cors(res, *args, **kwargs)
