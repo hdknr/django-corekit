@@ -71,9 +71,15 @@ def filtering(queryset, **kwargs):
 
 
 @register.simple_tag(takes_context=True)
-def set_query(context, field, value):
+def set_query(context, field, value, multi=False):
     qdict = context.get('request').GET.copy()
-    qdict.setlist(field, [value])
+    values = qdict.getlist(field)
+    if multi:
+        if value not in values:
+            values.append(value)
+    else:
+        values = [value]
+    qdict.setlist(field, values)
     return qdict.urlencode()
 
 
