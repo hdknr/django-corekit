@@ -1,5 +1,7 @@
 # django-corekit
-core kit for django
+
+- core kit for django
+- `p3` for python3
 
 ## Kit for
 
