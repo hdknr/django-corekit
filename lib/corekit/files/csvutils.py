@@ -5,7 +5,7 @@
 
 '''
 from django.conf import settings
-from django.utils.encoding import force_unicode, force_text
+from django.utils.encoding import force_text
 
 import csv
 import io
@@ -49,7 +49,7 @@ class CsvReader(object):
     def decode(self, value):
         ''' value: str '''
         self.col = self.col + 1
-        return force_unicode(
+        return force_text(
             value, encoding=self.encoding, errors=self.error_mode).strip()
 
     def next(self):

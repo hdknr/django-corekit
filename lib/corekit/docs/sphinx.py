@@ -1,6 +1,6 @@
 import inspect
 from django.utils.html import strip_tags
-from django.utils.encoding import force_unicode
+from django.utils.encoding import force_text
 from django.db import models, connections
 from django.conf import settings
 
@@ -23,10 +23,10 @@ def process_docstring(app, what, name, obj, options, lines):
             continue
 
         # `help_text`
-        help_text = strip_tags(force_unicode(field.help_text))
+        help_text = strip_tags(force_text(field.help_text))
 
         # `verbose_name`
-        verbose_name = force_unicode(field.verbose_name).capitalize()
+        verbose_name = force_text(field.verbose_name).capitalize()
 
         if help_text:
             lines.append(u':param {0}: {1}({2})     [{3}]'.format(

@@ -47,7 +47,7 @@ class UploadPath(object):
 
     @classmethod
     def get_filepath(cls, access, app_label, model_name, field_name, name):
-        name = encoding.force_unicode(name)
+        name = encoding.force_text(name)
         ret = u'{}/{}'.format(
             cls.get_base_url(access, app_label, model_name, field_name), name)
 
@@ -60,6 +60,7 @@ def get_local_storage(base_dir, access, app_label, model_name, field_name):
     storage = FileSystemStorage(
         location=os.path.join(settings.BASE_DIR, base_dir), base_url=base_url)
     return storage
+
 
 DEFAULT_MIMETYPE = 'text/csv'
 

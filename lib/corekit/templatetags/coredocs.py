@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django import template
-from django.utils.encoding import force_unicode
+from django.utils.encoding import force_text
 
 
 register = template.Library()
@@ -23,7 +23,7 @@ HEADER = ['=', '=', '-', '^', '~', '#', ]
 
 @register.simple_tag
 def header_label(text, level=0):
-    text = u"{}".format(force_unicode(text))
+    text = u"{}".format(force_text(text))
     level = level and int(level) or 0
     line = len(text) * 2 * HEADER[level]
     return "\n".join([
