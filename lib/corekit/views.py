@@ -23,7 +23,7 @@ import os
 import mimetypes
 
 from mimetypes import guess_type
-from functools import wraps, partial
+from functools import wraps, partial, reduce
 from . import methods, querysets, responses, utils
 from operator import itemgetter
 
@@ -78,7 +78,7 @@ class View(object):
                 for name, _, func in sorted(funcs, key=itemgetter(1))
             ]
             cls._handlers = dict(
-                (u.callback.im_func.func_name, u.name) for u in cls._urls)
+                (u.callback.__name__, u.name) for u in cls._urls)
             return cls._urls
         return hasattr(cls, '_urls') and cls._urls or _cache()
 
