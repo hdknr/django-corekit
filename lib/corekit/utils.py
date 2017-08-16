@@ -6,24 +6,22 @@ from django.utils.six.moves.urllib.parse import urlparse
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth import get_permission_codename
 from django.utils import six
-
+from mdx_gfm import GithubFlavoredMarkdownExtension
+from mimetypes import guess_type
+from distutils.util import strtobool
+import djclick as click
+import markdown
+import json
+import re
+import yaml
+import time
+import struct
 if six.PY3:
     import io
     contents = io.BytesIO
 else:
     import StringIO
     contents = StringIO.StringIO
-
-import markdown
-import json
-from mdx_gfm import GithubFlavoredMarkdownExtension
-from mimetypes import guess_type
-from distutils.util import strtobool
-import djclick as click
-import re
-import yaml
-import time
-import struct
 
 
 def get_absolute_url(instance, name='detail'):
@@ -89,7 +87,7 @@ def to_admin_changelist_url(instance_or_class):
 
 def spaceless(src):
     '''空白を取り除く'''
-    return re.sub(ur'[\s\u3000]', '', src or '')
+    return re.sub(r'[\s\u3000]', '', src or '')
 
 
 def render(src, request=None, **ctx):
