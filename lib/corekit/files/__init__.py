@@ -13,7 +13,7 @@ from .xlsxutils import XlsxReader, XlsxWriter, XlsxBaseReader
 import mimetypes
 
 import traceback
-from urllib import unquote as UQ
+from urllib.parse import unquote as UQ
 import os
 
 from logging import getLogger
