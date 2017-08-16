@@ -97,12 +97,13 @@ def tup(src, arg):
 
 
 @register.filter
-def has_perm((obj, user), perm):
+def has_perm(obj_user, perm):
     '''
         {% if org|tup:request.user|has_perm:"events.change_event" %}
             <a href="{{ add_url }}">{% trans "Add" %}</a>
         {% endif %}
     '''
+    obj, user = obj_user[0], obj_user[1]
     return user.has_perm(perm, obj)
 
 
@@ -118,12 +119,13 @@ def get_instance_list(id_list, content_type):
 
 
 @register.filter
-def can((obj, user), action):
+def can(obj_user, action):
     '''
         {% if org|tup:request.user|can:"events.change_event" %}
             <a href="{{ add_url }}">{% trans "Add" %}</a>
         {% endif %}
     '''
+    obj, user = obj_user[0], obj_user[1]
     perm = utils.get_perm_name(obj, action)
     return user.has_perm(perm, obj)
 
