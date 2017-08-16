@@ -1,13 +1,13 @@
 # coding: utf-8
 from django.core import serializers
 import zipfile
-import StringIO
+from io import StringIO
 
 
 class Zipball(object):
     def __init__(self):
         # Create the in-memory file-like object
-        self.in_memory_zip = StringIO.StringIO()
+        self.in_memory_zip = StringIO()
 
     def append(self, filename_in_zip, file_contents):
         # Get a handle to the in-memory zip in append mode
@@ -34,7 +34,7 @@ class Zipball(object):
 
     def writetofile(self, filename):
         '''Writes the in-memory zip to a file.'''
-        f = file(filename, "w")
+        f = open(filename, "w")
         f.write(self.read())
         f.close()
 

@@ -6,10 +6,8 @@
 '''
 from django.conf import settings
 from django.utils.encoding import force_text
-
 import csv
 import io
-import StringIO
 import traceback
 import nkf
 
@@ -24,12 +22,12 @@ class CsvReader(object):
         if isinstance(iterable, io.StringIO):
             assert encoding
             self.encoding = encoding
-            iterable = StringIO.StringIO(iterable.read().encode(encoding))
+            iterable = io.StringIO(iterable.read().encode(encoding))
         else:
             # force utf8 with nkf module
             # https://github.com/fumiyas/python-nkf
             self.encoding = 'utf8'
-            iterable = StringIO.StringIO(nkf.nkf('-w', iterable.read()))
+            iterable = io.StringIO(nkf.nkf('-w', iterable.read()))
 
         self.headers = headers
         self.reader = headers and \
@@ -90,7 +88,7 @@ class CsvWriter(object):
         def _convert(s):
             if s is None:
                 return ''
-            if isinstance(s, basestring):
+            if isinstance(s, str):
                 try:
                     return u'{0}'.format(force_text(s)).encode(
                         self.encoding, errors='ignore')
