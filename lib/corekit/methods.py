@@ -10,7 +10,7 @@ from django.forms.models import model_to_dict
 
 from collections import OrderedDict
 from itertools import chain
-from utils import force_bool
+from .utils import force_bool
 import re
 from .serializers import BaseObjectSerializer as Sz
 

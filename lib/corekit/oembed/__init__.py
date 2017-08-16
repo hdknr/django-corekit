@@ -49,7 +49,6 @@ def get_html(url, force_source=False):
 
     if not oembed['html']:
         oembed['url'], oembed['source'] = get(url)
-        print oembed['url']
         if oembed['url']:
             res = requests.get(oembed['url']).json()
             for i in ['html', 'rendered_body']:
