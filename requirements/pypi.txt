@@ -6,6 +6,7 @@ pytz
 django-click
 enum34
 nkf
+PyYAML
 
 # REST
 djangorestframework
