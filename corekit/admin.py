@@ -9,7 +9,14 @@ from . import utils
 
 
 def register(module_name, admins, ignore_models=[]):
-    ''' Regiter Admin UI  '''
+    ''' Regiter Admin UI  
+    
+    admin.py::
+
+        from corekit.admin import register
+        register(__name__, globals(), ignore_models=['User', ])
+
+    '''
     app_label = module_name.split('.')[-2:][0]
     for model in apps.get_app_config(app_label).get_models():
 
