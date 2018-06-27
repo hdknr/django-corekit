@@ -26,7 +26,7 @@ else:
 register = template.Library()
 
 
-@register.assignment_tag(takes_context=True)
+@register.simple_tag(takes_context=True)
 def media_path(context, bulletin):
     return SafeText('media path')
 

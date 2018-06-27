@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 from django.db.models import BooleanField
 from django.db.models.fields.related import OneToOneRel, RelatedField
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth import get_permission_codename
 from django.utils.safestring import mark_safe as _S

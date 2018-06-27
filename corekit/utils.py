@@ -1,5 +1,4 @@
-# -*- coding: utf-8 -*-
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.template import loader
 from django.utils.safestring import mark_safe as _S
 from django.utils.six.moves.urllib.parse import urlparse
@@ -16,12 +15,6 @@ import re
 import yaml
 import time
 import struct
-if six.PY3:
-    import io
-    contents = io.BytesIO
-else:
-    import StringIO
-    contents = StringIO.StringIO
 
 
 def get_absolute_url(instance, name='detail'):
