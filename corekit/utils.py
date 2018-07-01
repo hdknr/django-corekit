@@ -15,6 +15,7 @@ import re
 import yaml
 import time
 import struct
+import subprocess
 
 
 def get_absolute_url(instance, name='detail'):
@@ -160,3 +161,9 @@ def url(url_string):
 def permcode_items(perm_code):
     p = re.split(r"[._]", perm_code) + [None, None, None]
     return dict(zip(['app_label', 'action', 'model'], p[:3]))
+
+
+def run_at(command, dt):
+    '''execute command at specifed datetime'''
+    sched_cmd = ['/usr/bin/at', dt.strftime('%H:%M %m/%d/%Y')]
+    subprocess.Popen(sched_cmd, stdin=subprocess.PIPE).communicate(command.encode('utf8'))
