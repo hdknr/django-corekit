@@ -11,11 +11,12 @@ from django.utils import formats
 from django.utils.html import format_html
 from django.utils.safestring import SafeText, mark_safe as _S
 from django.utils.translation import ugettext_lazy as _
-from corekit import (utils, methods, oembed as oe, auth)
 from django.contrib.sites.models import Site
 from datetime import date
 import json
 import os
+from corekit import (serializers, utils, methods, oembed as oe, auth)
+
 
 if VERSION > (1, 10):
     Context = dict
