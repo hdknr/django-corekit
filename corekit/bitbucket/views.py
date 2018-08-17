@@ -7,7 +7,7 @@ from . import signals
 
 @csrf_exempt
 @require_http_methods(["POST"])
-def hook(request):
+def hook(request, app_key):
     '''
     curl -X POST -H "Content-Type: application/json" -d '{"repository": {"name": "coolsite", "owner": {"name": "hoge"}  }}' http://localhost/bitbucket/hook
     '''
@@ -16,7 +16,7 @@ def hook(request):
     if not user and not repo:
         return JsonResponse({'success': False, 'message': 'No JSON data or URL argument : cannot identify hook'})
 
-    signals.bitbucket_webhook.send(sender=request, payload=payload, user=user, repo=repo)
+    signals.bitbucket_webhook.send(sender=request, app_key=app_key, payload=payload, user=user, repo=repo)
 
     return JsonResponse({'success': True})
 

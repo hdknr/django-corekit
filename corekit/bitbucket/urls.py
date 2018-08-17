@@ -3,5 +3,5 @@ from . import views
 
 
 urlpatterns = [
-    path('hook', views.hook, name='corekit_bitbucket_hook'),                   
+    path('hook/<str:app_key>', views.hook, name='corekit_bitbucket_hook'),                   
 ]
