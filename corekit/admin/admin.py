@@ -5,7 +5,7 @@ from django.apps import apps
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import Permission, ContentType
 
-from . import utils
+from corekit import utils
 
 
 def register(module_name, admins, ignore_models=[]):
