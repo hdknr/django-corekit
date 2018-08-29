@@ -31,3 +31,8 @@ xlwt
 
 # AWS
 awscli
+
+# test
+factory_boy
+django_nose
+django_extensions
