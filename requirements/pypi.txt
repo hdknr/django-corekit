@@ -19,7 +19,7 @@ django-fullurl
 django-storages
 
 # Text
-markdown
+markdown<3.0
 py-gfm
 
 # HTML
