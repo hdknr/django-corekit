@@ -136,6 +136,10 @@ def to_gfm(text, safe=True):
     return _S(md.convert(text)) if safe else md.convert(text)
 
 
+def is_filetype(path, typename):
+    return guess_type (path)[0] == typename
+
+
 def convert(source, format='yaml'):
     if format in ['yaml', 'yml']:
         return yaml.load(source)
