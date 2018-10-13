@@ -36,3 +36,6 @@ awscli
 factory_boy
 django_nose
 django_extensions
+
+# date
+python-dateutil
