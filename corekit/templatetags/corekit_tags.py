@@ -22,3 +22,9 @@ def render_by(name, **ctx):
     if utils.is_filetype(name, 'text/markdown'):
         t = template.engines['django'].from_string(utils.to_gfm(t.template.source)) 
     return _S(t.render(ctx, request=request))
+
+
+@register.filter
+def gfm(text):
+    '''Github Favored Markdown'''
+    return utils.to_gfm(text)

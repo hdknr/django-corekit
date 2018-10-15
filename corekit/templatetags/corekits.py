@@ -16,6 +16,7 @@ from datetime import date
 import json
 import os
 from corekit import (serializers, utils, methods, oembed as oe, auth)
+from .corekit_tags import gfm               #
 
 
 if VERSION > (1, 10):
@@ -163,12 +164,6 @@ def attr(instance, name):
         return render_by('corekit/attr_image.html', instances=value)
 
     return value
-
-
-@register.filter
-def gfm(text):
-    '''Github Favored Markdown'''
-    return utils.to_gfm(text)
 
 
 @register.filter

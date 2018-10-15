@@ -132,6 +132,8 @@ def list_to_choices(choices):
 
 def to_gfm(text, safe=True):
     '''Github Favored Markdown'''
+    if not text:
+        return ''
     md = markdown.Markdown(extensions=[GithubFlavoredMarkdownExtension()])
     return _S(md.convert(text)) if safe else md.convert(text)
 
