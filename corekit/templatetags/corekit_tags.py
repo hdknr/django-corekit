@@ -6,6 +6,14 @@ from corekit import serializers, utils
 register = template.Library()
 
 
+
+@register.filter
+def jsonize(obj, class_name=None):
+    if not obj:
+        return 'null'
+    return serializers.to_json(obj, class_name=class_name)
+
+
 @register.simple_tag(takes_context=True)
 def to_json(context, obj, class_name=None):
     '''Convert an object to JSON using Serializer'''
@@ -28,3 +36,4 @@ def render_by(name, **ctx):
 def gfm(text):
     '''Github Favored Markdown'''
     return utils.to_gfm(text)
+
