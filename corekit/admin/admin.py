@@ -68,10 +68,16 @@ class NoneListFilter(admin.SimpleListFilter):
 class CorelatedFilter(admin.RelatedFieldListFilter):
 
     def field_choices(self, field, request, model_admin):
-        name = "{}__{}".format(field.name, self.cofield)
+        fk = getattr(self, 'fk', None)
+        fk = fk and f'{fk}__' or ''
+        name = f"{fk}{field.name}__{self.cofield}"
         covalue = request.GET.get(name, '')
         if not covalue:
-            return field.get_choices(include_blank=False)
+            if getattr(self, 'show_all', True):
+                return field.get_choices(include_blank=False)
+            else:
+                return []
+
         return field.get_choices(
             include_blank=False,
             limit_choices_to={self.cofield: covalue})
