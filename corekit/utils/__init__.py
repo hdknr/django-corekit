@@ -62,7 +62,8 @@ def get_perm_name(model, action):
 
 
 def to_admin_change_url_name(instance_or_class):
-    return "admin:{}_{}_change".format(instance_or_class._meta.app_label)
+    return "admin:{}_{}_change".format(
+        instance_or_class._meta.app_label, instance_or_class._meta.model_name)
 
 
 def to_admin_change_url(instance_or_class, id=None):

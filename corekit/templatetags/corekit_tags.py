@@ -36,4 +36,3 @@ def render_by(name, **ctx):
 def gfm(text):
     '''Github Favored Markdown'''
     return utils.to_gfm(text)
-
