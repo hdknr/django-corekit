@@ -36,3 +36,13 @@ def render_by(name, **ctx):
 def gfm(text):
     '''Github Favored Markdown'''
     return utils.to_gfm(text)
+
+
+@register.simple_tag(takes_context=True)
+def admin_change_link(context, instance, label=None):
+    label = label or str(instance)
+    request = context.get('request', None) 
+    if request and request.user.is_staff:
+        url = utils.to_admin_change_url(instance)
+        return  _S(f'<a href="{url}">{label}</a>')
+    return _S(label)
