@@ -46,8 +46,8 @@ def register(module_name, admins, ignore_models=[]):
 class NoneListFilter(admin.SimpleListFilter):
     def lookups(self, request, model_admin):
         return (
-            ('1', _('None'), ),
-            ('0', _('!= None'), ),
+            ('1', self.true_label),
+            ('0', self.false_label),
         )
 
     def queryset(self, request, queryset):
@@ -59,10 +59,11 @@ class NoneListFilter(admin.SimpleListFilter):
         return queryset
 
     @classmethod
-    def create(cls, title, parameter_name):
+    def create(cls, title, parameter_name, true_label=_('None'), false_label=_('!= None')):
         return type(
             'NoneListFilterEx', (cls, ),
-            {'title': title, 'parameter_name': parameter_name})
+            {'title': title, 'parameter_name': parameter_name, 
+             'true_label': true_label, 'false_label': false_label})
 
 
 class CorelatedFilter(admin.RelatedFieldListFilter):
