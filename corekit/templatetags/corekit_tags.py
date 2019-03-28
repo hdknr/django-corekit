@@ -41,6 +41,8 @@ def gfm(text):
 
 @register.simple_tag(takes_context=True)
 def admin_change_link(context, instance, label=None, private=False):
+    if not instance:
+        return ''
     label = label or str(instance)
     request = context.get('request', None) 
     if request and request.user.is_staff:
