@@ -51,3 +51,9 @@ def admin_change_link(context, instance, label=None, private=False):
         url = utils.to_admin_change_url(instance)
         return  _S(f'<a href="{url}">{label}</a>')
     return  private and '' or _S(label) 
+
+
+@register.filter
+def ctaxed(value):
+    '''Consumption Tax Added(JPY)'''
+    return utils.values.taxed(value)
