@@ -54,6 +54,6 @@ def admin_change_link(context, instance, label=None, private=False):
 
 
 @register.filter
-def ctaxed(value, bare=False):
+def ctaxed(value, total=True):
     '''Consumption Tax Added(JPY)'''
-    return utils.values.taxed(value, bare=bare)
+    return utils.values.taxed(value, total=total)
