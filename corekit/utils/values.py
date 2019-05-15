@@ -6,7 +6,8 @@ def _V(value):
 
 
 def ceil(value, base=Decimal('0')):
-    return _V(value).quantize(base, rounding=ROUND_CEILING)
+    value, base = _V(value), _V(base)
+    return value.quantize(base, rounding=ROUND_CEILING)
 
 
 def taxed(value, rate=Decimal('0.08'), total=True):
