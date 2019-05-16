@@ -30,14 +30,15 @@ def ipafont(ctx):
 @main.command()
 @click.argument('app_label')
 @click.option('--subdocs', '-s', is_flag=True)
+@click.option('--doctype', '-t', default='rst')
 @click.pass_context
-def doc_models(self, app_label, subdocs):
+def doc_models(self, app_label, subdocs, doctype):
     from django.apps import apps
     from django.db import connections
     con = connections['default']      # TODO
     app = apps.get_app_config(app_label)
     click.echo(utils.render_by(
-        'corekit/db/models.rst',
+        f'corekit/db/models.{doctype}',
         app=app, connection=con, subdoc=subdocs))
 
 
