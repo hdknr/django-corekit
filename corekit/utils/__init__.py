@@ -85,19 +85,21 @@ def spaceless(src):
     return re.sub(r'[\s\u3000]', '', src or '')
 
 
-def render(src, request=None, **ctx):
+def render(src, request=None, safe=True, **ctx):
     '''テンプレート文字列でレンダリングする'''
 
     from django.template import engines
     engine = engines['django']
     request = request or None
-    return _S(engine.from_string(src).render(ctx, request=request))
+    text = engine.from_string(src).render(ctx, request=request)
+    return safe and _S(text) or text
 
 
-def render_by(name, request=None, **ctx):
+def render_by(name, request=None, safe=True, **ctx):
     '''テンプレートファイルでレンダリングする'''
     request = request or None
-    return _S(loader.get_template(name).render(ctx, request=request))
+    text = loader.get_template(name).render(ctx, request=request)
+    return safe and _S(text) or text 
 
 
 def echo(teml, fg="green", **kwargs):
