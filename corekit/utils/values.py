@@ -1,4 +1,4 @@
-from decimal import Decimal, ROUND_CEILING
+from decimal import Decimal, ROUND_CEILING, ROUND_FLOOR
 
 
 def _V(value):
@@ -8,6 +8,11 @@ def _V(value):
 def ceil(value, base=Decimal('0')):
     value, base = _V(value), _V(base)
     return value.quantize(base, rounding=ROUND_CEILING)
+
+
+def floor(value, base=Decimal('0')):
+    value, base = _V(value), _V(base)
+    return value.quantize(base, rounding=ROUND_FLOOR)
 
 
 def taxed(value, rate=Decimal('0.08'), total=True):
