@@ -77,3 +77,10 @@ class FileResponse(HttpResponse):
             self.writer.writerow(data.values())
         self.writer.close()
         return self
+
+
+class ExcelResponse(HttpResponse):
+    def __init__(self, wb, filename="download.xlsx", *args, **kwargs):
+        super().__init__(content_type="application/vnd.ms-excel", *args, **kwargs)
+        self['Content-Disposition'] = f'attachment; filename="{filename}"'
+        wb.save(self)
