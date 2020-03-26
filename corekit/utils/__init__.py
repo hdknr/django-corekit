@@ -1,10 +1,16 @@
+import django
+
+if django.VERSION < (3, 0):
+    # https://docs.djangoproject.com/en/3.0/releases/3.0/
+    from django.utils.six.moves.urllib.parse import urlparse
+else:
+    from urllib.parse import urlparse
+
 from django.urls import reverse
 from django.template import loader
 from django.utils.safestring import mark_safe as _S
-from django.utils.six.moves.urllib.parse import urlparse
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth import get_permission_codename
-from django.utils import six
 from mdx_gfm import GithubFlavoredMarkdownExtension
 from mimetypes import guess_type
 from distutils.util import strtobool
