@@ -73,10 +73,11 @@ class XlsxWriter(object):
         self.row = start
 
     def writerow(self, row):
-        for i in xrange(1, len(row) + 1):
+        for i in range(1, len(row) + 1):
             ci = "{0}{1}".format(get_column_letter(i), self.row)
             self.sheet[ci].value = force_text(row[i - 1])
         self.row += 1
 
     def close(self):
         self.stream.write(save_virtual_workbook(self.book))
+        return self.stream

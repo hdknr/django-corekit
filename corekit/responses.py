@@ -3,7 +3,7 @@ from django.utils.encoding import force_text
 from django.http import HttpResponse
 
 from .serializers import BaseObjectSerializer as _S
-from .files import create_writer, get_mimetype
+from .files import create_writer, get_mimetype, xlsxutils
 
 
 class CoreFileResponse(HttpResponse):
@@ -80,7 +80,7 @@ class FileResponse(HttpResponse):
 
 
 class ExcelResponse(HttpResponse):
-    def __init__(self, wb, filename="download.xlsx", *args, **kwargs):
+    def __init__(self, wb=None, filename="download.xlsx", *args, **kwargs):
         super().__init__(content_type="application/vnd.ms-excel", *args, **kwargs)
         self['Content-Disposition'] = f'attachment; filename="{filename}"'
-        wb.save(self)
+        self.writer = xlsxutils.XlsxWriter(self,  wb)
