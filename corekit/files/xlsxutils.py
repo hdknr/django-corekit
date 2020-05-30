@@ -61,13 +61,23 @@ class XlsxReader(XlsxBaseReader):
 class XlsxWriter(object):
     MIMETYPE = EXCEL2007
 
+    def _default_workbook(self, src):
+        if not src:
+            return Workbook()
+        if isinstance(src, str):
+            return load_workbook(filename=src)
+        if isinstance(src, Workbook):
+            return src
+        return None
+
+
     def __init__(self, stream, src=None, start=1, **kwargs):
         '''
             :type header: dict or None
             :param haeder: if None, the first row is `header`
         '''
         self.stream = stream
-        self.book = src and load_workbook(filename=src) or Workbook()
+        self.book = self._default_workbook(src)
         self.sheet = self.book.active
         self.sheet.title = "NewSheet"
         self.row = start

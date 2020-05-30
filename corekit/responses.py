@@ -84,3 +84,6 @@ class ExcelResponse(HttpResponse):
         super().__init__(content_type="application/vnd.ms-excel", *args, **kwargs)
         self['Content-Disposition'] = f'attachment; filename="{filename}"'
         self.writer = xlsxutils.XlsxWriter(self,  wb)
+
+    def close(self):
+        return self.writer.close()
