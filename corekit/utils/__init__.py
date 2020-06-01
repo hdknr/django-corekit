@@ -11,7 +11,7 @@ from django.template import loader
 from django.utils.safestring import mark_safe as _S
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth import get_permission_codename
-from mdx_gfm import GithubFlavoredMarkdownExtension
+# from mdx_gfm import GithubFlavoredMarkdownExtension
 from mimetypes import guess_type
 from distutils.util import strtobool
 import djclick as click
@@ -143,7 +143,8 @@ def to_gfm(text, safe=True):
     '''Github Favored Markdown'''
     if not text:
         return ''
-    md = markdown.Markdown(extensions=[GithubFlavoredMarkdownExtension()])
+    # md = markdown.Markdown(extensions=[GithubFlavoredMarkdownExtension()])
+    md = markdown.Markdown()
     return _S(md.convert(text)) if safe else md.convert(text)
 
 
