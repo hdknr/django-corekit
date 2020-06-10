@@ -144,7 +144,7 @@ def to_gfm(text, safe=True):
     if not text:
         return ''
     # md = markdown.Markdown(extensions=[GithubFlavoredMarkdownExtension()])
-    md = markdown.Markdown()
+    md = markdown.Markdown(extensions=['markdown.extensions.tables'])
     return _S(md.convert(text)) if safe else md.convert(text)
 
 
