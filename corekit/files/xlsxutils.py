@@ -65,7 +65,8 @@ class XlsxWriter(object):
         if not src:
             return Workbook()
         if isinstance(src, str):
-            return load_workbook(filename=src)
+            book = load_workbook(filename=src)
+            return book
         if isinstance(src, Workbook):
             return src
         return None
@@ -79,7 +80,6 @@ class XlsxWriter(object):
         self.stream = stream
         self.book = self._default_workbook(src)
         self.sheet = self.book.active
-        self.sheet.title = "NewSheet"
         self.row = start
 
     def writerow(self, row):
