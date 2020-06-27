@@ -2,6 +2,7 @@ from django import template
 from django.utils.safestring import SafeText, mark_safe as _S
 from django.utils.translation import ugettext_lazy as _
 from corekit import serializers, utils
+from corekit.utils import values
 
 
 register = template.Library()
@@ -56,4 +57,4 @@ def admin_change_link(context, instance, label=None, private=False):
 @register.filter
 def ctaxed(value, total=True):
     '''Consumption Tax Added(JPY)'''
-    return utils.values.taxed(value, total=total)
+    return values.taxed(value, total=total)

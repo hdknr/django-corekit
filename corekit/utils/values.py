@@ -15,7 +15,7 @@ def floor(value, base=Decimal('0')):
     return value.quantize(base, rounding=ROUND_FLOOR)
 
 
-def taxed(value, rate=Decimal('0.08'), total=True):
+def taxed(value, rate=Decimal('0.10'), total=True):
     rate = total and (Decimal(1.0) + rate) or rate
     value = _V(value) * rate
     return ceil(value)
