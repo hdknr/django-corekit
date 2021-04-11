@@ -19,8 +19,7 @@ django-fullurl
 django-storages
 
 # Text
-markdown<3.0
-py-gfm
+markdown
 
 # HTML
 beautifulsoup4
